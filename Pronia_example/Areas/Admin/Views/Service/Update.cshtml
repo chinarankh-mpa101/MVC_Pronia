@@ -1,0 +1,29 @@
+﻿@model AppFeature
+<div class="container">
+	<div class="row">
+		<form method="post" asp-action="Update" asp-controller="Service">
+			<div class="form-group">
+				<label for="title">Title</label>
+				<input asp-for="Title" class="form-control" id="title" placeholder="Title">
+				<span class="text-danger" asp-validation-for="Title"></span>
+			</div>
+			<div class="form-group">
+				<label for="description">Description</label>
+				<input asp-for="Description" class="form-control" id="description" placeholder="Description">
+				<span class="text-danger" asp-validation-for="Description"></span>
+
+			</div>
+
+			<div class="form-group">
+				<label for="imageUrl">ImageUrl</label>
+				<input asp-for="ImageUrl" class="form-control" id="imageUrl" placeholder="ImageUrl">
+				<span class="text-danger" asp-validation-for="ImageUrl"></span>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+			<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+		</form>
+	</div>
+</div>
+
+
+

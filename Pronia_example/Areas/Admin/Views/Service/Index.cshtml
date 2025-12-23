@@ -27,7 +27,7 @@
 						<td>@feature.Description</td>
 						<td> <img src="~/assets/images/website-images/@feature.ImageUrl" alt="Alternate Text" /> </td>
 						<td>
-							<a class="btn btn-warning">Update</a>
+							<a class="btn btn-warning" asp-action="Update" asp-route-id="@feature.Id" >Update</a>
 							<a asp-action="Delete" asp-route-id="@feature.Id" class="btn btn-danger">Delete</a>
 						</td>
 					</tr>
