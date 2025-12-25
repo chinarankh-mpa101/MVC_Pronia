@@ -18,6 +18,7 @@ namespace Pronia_example.Contexts
 
         public DbSet <AppFeature> AppFeatures { get; set; }
         public DbSet <Product> Products { get; set; }
+        public DbSet <Productİmage> Productİmages { get; set; }
         public DbSet <Category> Categories { get; set; }
     }
 }

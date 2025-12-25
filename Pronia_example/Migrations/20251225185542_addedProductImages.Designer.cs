@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pronia_example.Contexts;
 
@@ -10,9 +11,11 @@ using Pronia_example.Contexts;
 namespace Pronia_example.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251225185542_addedProductImages")]
+    partial class addedProductImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,9 +98,6 @@ namespace Pronia_example.Migrations
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -141,12 +141,17 @@ namespace Pronia_example.Migrations
             modelBuilder.Entity("Pronia_example.Models.Productİmage", b =>
                 {
                     b.HasOne("Pronia_example.Models.Product", "product")
-                        .WithMany()
+                        .WithMany("Productİmages")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("product");
+                });
+
+            modelBuilder.Entity("Pronia_example.Models.Product", b =>
+                {
+                    b.Navigation("Productİmages");
                 });
 #pragma warning restore 612, 618
         }

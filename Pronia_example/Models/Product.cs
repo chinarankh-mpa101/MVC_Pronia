@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pronia_example.Models.Common;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pronia_example.Models
 {
@@ -16,12 +17,19 @@ namespace Pronia_example.Models
 		[Range(0,double.MaxValue)]
 		public decimal Price { get; set; }
 
+		public Category Category { get; set; }
 		[Required]
-		[MaxLength(512)]
-		public string ImagePath { get; set; }
+		public int CategoryId { get; set; }
 
-		public Category? Category { get; set; }
-		[Required]
-		public int CategoryId { get; set; }	
+		public string MainImagePath { get; set; }
+
+
+		public string HoverImagePath { get; set; }
+
+
+		[Range(1,5)]
+		public int Rating { get; set; }
+		
+		//public ICollection<Productİmage> Productİmages { get; set; }
 	}
 }

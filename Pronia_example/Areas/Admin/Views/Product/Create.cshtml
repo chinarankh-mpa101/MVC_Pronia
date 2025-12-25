@@ -1,8 +1,9 @@
-﻿@model Product
+﻿@model ProductCreateVM
+
 <div class="container">
 	<div class="row">
 		<h2>Create product</h2>
-		<form method="post" asp-action="Create" asp-controller="Product">
+		<form method="post" asp-action="Create" asp-controller="Product" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="title">Name</label>
 				<input asp-for="Name" class="form-control" id="title" placeholder="Name">
@@ -22,10 +23,17 @@
 			</div>
 
 			<div class="form-group">
-				<label for="imagePath">ImagePath</label>
-				<input asp-for="ImagePath" class="form-control" id="imagePath" placeholder="ImagePath">
-				<span class="text-danger" asp-validation-for="ImagePath"></span>
+				<label for="Main Image">Main Image</label>
+				<input asp-for="MainImage" class="form-control" id="mainImage" placeholder="MainImage">
+				<span class="text-danger" asp-validation-for="MainImage"></span>
 			</div>
+
+			<div class="form-group">
+				<label for="HoverImage">Hover Image</label>
+				<input asp-for="HoverImage" class="form-control" id="HoverImage" placeholder="HoverImage">
+				<span class="text-danger" asp-validation-for="HoverImage"></span>
+			</div>
+
 
 			<div class="form-group">
 				<label for="categoryId">CategoryId</label>
@@ -38,6 +46,22 @@
 					}
 				</select>
 				<span class="text-danger" asp-validation-for="CategoryId"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="Rating">Rating</label>
+				<select asp-for="Rating" class="form-control">
+					<option value="">- Rating seçin -</option>
+					@for (int i = 1; i <= 5; i++)
+					{
+						<option value="@i">
+							@(new string('⭐', i)) 
+						</option>
+					}
+				</select>
+
+
+				<span class="text-danger" asp-validation-for="Rating"></span>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 			<a asp-action="Index" class="btn btn-secondary">Cancel</a>
