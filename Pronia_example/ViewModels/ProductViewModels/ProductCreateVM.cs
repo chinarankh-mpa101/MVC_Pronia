@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Pronia_example.ViewModels.ProductViewModels
 {
-	public class ProductCreateVM
+    public class ProductCreateVM
 	{
 		[Required]
 		public string Name { get; set; }
@@ -17,6 +17,8 @@ namespace Pronia_example.ViewModels.ProductViewModels
 
 
 		public int CategoryId { get; set; }
+
+		public List<int> TagIds { get; set; }
 	
 		public IFormFile MainImage { get; set; }
 		public IFormFile HoverImage { get; set; }

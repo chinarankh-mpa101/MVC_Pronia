@@ -1,4 +1,4 @@
-﻿@model List<Product>
+﻿@model List<ProductGetVM>
 <div class="container">
 	<div class="row">
 
@@ -26,7 +26,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (Product product in Model)
+				@foreach (ProductGetVM product in Model)
 				{
 					<tr>
 						<th scope="row">@product.Id</th>
@@ -35,7 +35,7 @@
 						<td>@product.Price</td>
 						<td> <img src="~/assets/images/website-images/@product.MainImagePath" alt="Alternate Text" /> </td>
 						<td> <img src="~/assets/images/website-images/@product.HoverImagePath" alt="Alternate Text" /> </td>
-						<td>@product.Category.Name</td>
+						<td>@product.CategoryName</td>
 
 						<td>
 							@for (int i = 1; i <= 5; i++)
@@ -51,6 +51,7 @@
 							}
 						</td>
 						<td>
+							<a asp-action="Detail" asp-route-id="@product.Id" class="btn btn-primary">Info</a>
 							<a class="btn btn-warning" asp-action="Update" asp-route-id="@product.Id">Update</a>
 							<a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger deleteBtn">Delete</a>
 						</td>

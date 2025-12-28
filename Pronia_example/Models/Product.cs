@@ -29,7 +29,10 @@ namespace Pronia_example.Models
 
 		[Range(1,5)]
 		public int Rating { get; set; }
-		
-		//public ICollection<Productİmage> Productİmages { get; set; }
-	}
+
+		public ICollection<Productİmage> Productİmages { get; set; } = [];
+        public ICollection<ProductTag> ProductTags { get; set; } = [];
+
+        //public ICollection<Productİmage> Productİmages { get; set; }
+    }
 }

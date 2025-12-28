@@ -20,5 +20,8 @@ namespace Pronia_example.Contexts
         public DbSet <Product> Products { get; set; }
         public DbSet <Productİmage> Productİmages { get; set; }
         public DbSet <Category> Categories { get; set; }
+
+        public DbSet <Tag> Tags { get; set; }
+        public DbSet <ProductTag> ProductTags { get; set; }
     }
 }
