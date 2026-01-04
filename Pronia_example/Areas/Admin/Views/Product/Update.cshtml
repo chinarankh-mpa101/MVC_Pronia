@@ -24,7 +24,7 @@
 			</div>
 
 			<div class="form-group">
-				<input type="hidden" asp-for="MainImagePath"/>
+				<input type="hidden" asp-for="MainImagePath" />
 				<img src="~/assets/images/website-images/@Model.MainImagePath" width="50" height="50" />
 				<label for="MainImage">MainImage</label>
 				<input asp-for="MainImage" class="form-control" id="MainImage" placeholder="MainImage">
@@ -32,10 +32,31 @@
 			</div>
 
 			<div class="form-group">
-				<input type="hidden" asp-for="MainImagePath" />
-				<img src="~/assets/images/website-images/@Model.HoverImagePath" width="50" height="50"  />
+				<input type="hidden" asp-for="HoverImagePath" />
+				<img src="~/assets/images/website-images/@Model.HoverImagePath" width="50" height="50" />
 				<label for="HoverImage">HoverImage</label>
 				<input asp-for="HoverImage" class="form-control" id="HoverImage" placeholder="HoverImage">
+				<span class="text-danger" asp-validation-for="HoverImage"></span>
+			</div>
+
+			<div class="form-group">
+
+
+				@for (int i = 0; i < Model.AdditionalImagePaths.Count; i++)
+				{
+				@* 	string imagePath = Model.AdditionalImagePaths[i]; *@
+					<div class="imageDiv">
+
+						<input type="hidden" asp-for="AdditionalImagePaths" value="@Model.AdditionalImagePaths[i]" />
+						<input type="hidden" asp-for="AdditionalImageIds" value="@Model.AdditionalImageIds[i]" />
+						<div class="image" style="position:relative; width:50px; height:50px; display:inline">
+							<img src="~/assets/images/website-images/@Model.AdditionalImagePaths[i]" width="50" height="50" />
+							<span class="closeButton" style="position:absolute; right:4px; top:-14px;padding:1px; background-color:red; color:white;font-size:10px;cursor:pointer">X</span>
+						</div>
+					</div>
+				}
+				<label for="Images">Images</label>
+				<input asp-for="Images" class="form-control" id="Images" placeholder="Images">
 				<span class="text-danger" asp-validation-for="HoverImage"></span>
 			</div>
 
@@ -85,5 +106,13 @@
 	</div>
 </div>
 
-
+<script>
+	const removeButtons = document.querySelectorAll(".closeButton")
+	removeButtons.forEach(btn => {
+		btn.addEventListener("click", (e) => {
+			e.preventDefault();
+			btn.parentElement.parentElement.remove();
+		})
+	})
+</script>
 

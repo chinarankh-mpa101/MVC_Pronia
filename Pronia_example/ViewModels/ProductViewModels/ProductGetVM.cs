@@ -1,18 +1,22 @@
-﻿namespace Pronia_example.ViewModels.ProductViewModels
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace Pronia_example.ViewModels.ProductViewModels
 {
     public class ProductGetVM
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
 
-        public string CategoryName { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
 
-        public string MainImagePath { get; set; }
-        public string HoverImagePath { get; set; }
+        public string MainImagePath { get; set; } = string.Empty;
+        public string HoverImagePath { get; set; } = string.Empty;
         public int Rating { get; set; }
 
-        public List<string> TagNames { get; set; }
+        public List<string> TagNames { get; set; } = [];
+        public List<string> AdditionalImagePaths { get; set; } = [];
     }
 }

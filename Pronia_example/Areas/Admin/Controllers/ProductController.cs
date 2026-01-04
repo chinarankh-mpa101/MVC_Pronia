@@ -110,21 +110,44 @@ namespace Pronia_example.Areas.Admin.Controllers
                 ModelState.AddModelError("HoverImage", "Sekil olcusu maksimum 2MB ola biler");
             }
 
-            string uniqueMainImageName = Guid.NewGuid().ToString() + vm.MainImage.FileName;
-            string mainImagePath = @$"{_enviroment.WebRootPath}/assets/images/website-images/{uniqueMainImageName}";
+            foreach (var image in vm.Images)
+            {
 
-            using FileStream mainStream = new FileStream(mainImagePath, FileMode.Create);
-            await vm.MainImage.CopyToAsync(mainStream);
+                if (!image.CheckType())
+                {
+                    ModelState.AddModelError("Images", "Yalniz sekil formatinda data daxil edin");
+                    return View(vm);
+                }
+				if (!image.CheckSize(2))
+				{
+					ModelState.AddModelError("Images", "Maximum size 2mb olmalidir");
+					return View(vm);
+				}
+			}
+
+            string folderPath = Path.Combine(_enviroment.WebRootPath, "assets", "images", "website-images");
+
+
+            //string uniqueMainImageName = Guid.NewGuid().ToString() + vm.MainImage.FileName;
+            //string mainImagePath = @$"{_enviroment.WebRootPath}/assets/images/website-images/{uniqueMainImageName}";
+
+            //using FileStream mainStream = new FileStream(mainImagePath, FileMode.Create);
+            //await vm.MainImage.CopyToAsync(mainStream);
 
 
 
 
 
-            string uniqueHoverImageName = Guid.NewGuid().ToString() + vm.HoverImage.FileName;
-            string hoverImagePath = @$"{_enviroment.WebRootPath}/assets/images/website-images/{uniqueHoverImageName}";
+            //string uniqueHoverImageName = Guid.NewGuid().ToString() + vm.HoverImage.FileName;
+            //string hoverImagePath = @$"{_enviroment.WebRootPath}/assets/images/website-images/{uniqueHoverImageName}";
 
-            using FileStream hoverStream = new FileStream(hoverImagePath, FileMode.Create);
-            await vm.HoverImage.CopyToAsync(hoverStream);
+            //using FileStream hoverStream = new FileStream(hoverImagePath, FileMode.Create);
+            //await vm.HoverImage.CopyToAsync(hoverStream);
+
+
+            string uniqueMainImageName =  await vm.MainImage.SaveFileAsync(folderPath);
+            string uniqueHoverImageName = await vm.HoverImage.SaveFileAsync(folderPath);
+
 
 
             Product product = new()
@@ -136,8 +159,22 @@ namespace Pronia_example.Areas.Admin.Controllers
                 MainImagePath = uniqueMainImageName,
                 HoverImagePath = uniqueHoverImageName,
                 Rating = vm.Rating,
-                ProductTags = []
+                ProductTags = [],
+                Productİmages = []
             };
+
+            foreach (var image in vm.Images)
+            {
+
+                string uniqueFilePath = await image.SaveFileAsync(folderPath);
+                Productİmage productImage = new()
+				{
+					ImagePath = uniqueFilePath,
+					product= product
+                    // casib modelde Product tipinden product yaratmisam p kicik herfle(
+				};
+                product.Productİmages.Add(productImage);
+            }
 
             foreach (var tagId in vm.TagIds)
             {
@@ -161,7 +198,7 @@ namespace Pronia_example.Areas.Admin.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products.Include(x=>x.Productİmages).FirstOrDefaultAsync(x=>x.Id==id);
             if (product is null)
                 return NotFound();
             _context.Products.Remove(product);
@@ -181,6 +218,11 @@ namespace Pronia_example.Areas.Admin.Controllers
                 System.IO.File.Delete(hoverImagePath);
             }
 
+            foreach (var productImage in product.Productİmages)
+            {
+                string imagePath = Path.Combine(folderPath, productImage.ImagePath);
+                ExtensionMethods.DeleteFile(imagePath);
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -189,7 +231,7 @@ namespace Pronia_example.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var product = await _context.Products.Include(x => x.ProductTags).FirstOrDefaultAsync(x => x.Id == id);
+            var product = await _context.Products.Include(x => x.ProductTags).Include(x=>x.Productİmages).FirstOrDefaultAsync(x => x.Id == id);
             if (product is null)
                 return NotFound();
 
@@ -206,7 +248,9 @@ namespace Pronia_example.Areas.Admin.Controllers
                 MainImagePath = product.MainImagePath,
                 HoverImagePath = product.HoverImagePath,
                 Rating = product.Rating,
-                TagIds = product.ProductTags.Select(x => x.TagId).ToList()
+                TagIds = product.ProductTags.Select(x => x.TagId).ToList(),
+                AdditionalImagePaths=product.Productİmages.Select(x=>x.ImagePath).ToList(),
+                AdditionalImageIds=product.Productİmages.Select(x=>x.Id).ToList()
             };
             return View(vm);
 
@@ -258,7 +302,25 @@ namespace Pronia_example.Areas.Admin.Controllers
                 ModelState.AddModelError("HoverImage", "Sekil olcusu maksimum 2MB ola biler");
 			}
 
-            var existProduct = await _context.Products.Include(x=> x.ProductTags).FirstOrDefaultAsync(x=>x.Id==vm.Id);
+
+			foreach (var image in vm.Images ?? [])
+			{
+
+				if (!image.CheckType())
+				{
+					ModelState.AddModelError("Images", "Yalniz sekil formatinda data daxil edin");
+					return View(vm);
+				}
+				if (!image.CheckSize(2))
+				{
+					ModelState.AddModelError("Images", "Maximum size 2mb olmalidir");
+					return View(vm);
+				}
+			}
+
+
+
+			var existProduct = await _context.Products.Include(x=> x.ProductTags).Include(x=>x.Productİmages).FirstOrDefaultAsync(x=>x.Id==vm.Id);
             if (existProduct is null)
                 return BadRequest();
 
@@ -302,9 +364,37 @@ namespace Pronia_example.Areas.Admin.Controllers
                     existProduct.HoverImagePath = newHoverImagePath;
                 }
 
-                _context.Products.Update(existProduct);
+
+            var existImages = existProduct.Productİmages.ToList();
+           
+            foreach(var image in existImages)
+            {
+                var isExistImageId = vm.AdditionalImageIds?.Any(x => x == image.Id) ?? false;
+                if (!isExistImageId)
+                {
+                    string deletedImagePath = Path.Combine(folderPath, image.ImagePath);
+                    ExtensionMethods.DeleteFile(deletedImagePath);// serverden silirem
+                    existProduct.Productİmages.Remove(image);// dbden silirem burdada 
+                }
+            }
+
+			foreach (var image in vm.Images ?? [])
+			{
+
+				string uniqueFilePath = await image.SaveFileAsync(folderPath);
+				Productİmage productImage = new()
+				{
+					ImagePath = uniqueFilePath,
+					ProductId = existProduct.Id
+					// casib modelde Product tipinden product yaratmisam p kicik herfle(
+				};
+				existProduct.Productİmages.Add(productImage);
+			}
+
+			_context.Products.Update(existProduct);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
             
 
         }
@@ -321,7 +411,8 @@ namespace Pronia_example.Areas.Admin.Controllers
                     MainImagePath = product.MainImagePath,
                     HoverImagePath = product.HoverImagePath,
                     Rating = product.Rating,
-                    TagNames = product.ProductTags.Select(x => x.Tag.Name).ToList()
+                    TagNames = product.ProductTags.Select(x => x.Tag.Name).ToList(),
+                    AdditionalImagePaths=product.Productİmages.Select(x=>x.ImagePath).ToList()
                 }).FirstOrDefaultAsync(x => x.Id == id);
 
                 if (product is null)

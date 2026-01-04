@@ -23,8 +23,13 @@ namespace Pronia_example.ViewModels.ProductViewModels
         public IFormFile? MainImage { get; set; }
         public IFormFile? HoverImage { get; set; }
 
+        public ICollection <IFormFile>? Images { get; set; } 
+
         public string? MainImagePath { get; set; }
         public string? HoverImagePath { get; set; }
+
+        public List<string>? AdditionalImagePaths { get; set; } = [];
+        public List<int>? AdditionalImageIds { get; set; } = [];
 
         [Range(1, 5)]
         public int Rating { get; set; }

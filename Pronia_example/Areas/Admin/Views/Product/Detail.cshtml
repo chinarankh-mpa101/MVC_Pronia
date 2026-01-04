@@ -15,6 +15,13 @@
                 
             }
         </p>
+
+        <h3>Additional Images</h3>
+        @foreach(var imagePath in Model.AdditionalImagePaths)
+        {
+            <img class="card-img-top" src="~/assets/images/website-images/@imagePath" alt="Card image cap">
+        }
+
         <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
 </div>
