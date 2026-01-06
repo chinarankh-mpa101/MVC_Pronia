@@ -9,6 +9,7 @@ namespace Pronia_example.ViewModels.UserViewModels
 
         [Required, MaxLength(32), MinLength(6), DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
+        public bool IsRemember { get; set; }
     }
 
 

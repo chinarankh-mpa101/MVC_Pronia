@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pronia_example.Models;
+using System.Reflection;
 
 namespace Pronia_example.Contexts
 {
@@ -17,7 +18,13 @@ namespace Pronia_example.Contexts
             
         }
 
-        public DbSet <AppFeature> AppFeatures { get; set; }
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+			base.OnModelCreating(builder);
+		}
+
+		public DbSet <AppFeature> AppFeatures { get; set; }
         public DbSet <Product> Products { get; set; }
         public DbSet <Productİmage> Productİmages { get; set; }
         public DbSet <Category> Categories { get; set; }

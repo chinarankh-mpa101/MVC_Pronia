@@ -7,18 +7,18 @@ namespace Pronia_example.Models
 {
 	public class Product:BaseEntity
 	{
-		[Required]
+		//[Required]
 		public string Name { get; set; }
-		[Required]
+		//[Required]
 		public string Description { get; set; }
 
-		[Required]
-		[Precision(10,2)]
-		[Range(0,double.MaxValue)]
+		//[Required]
+		//[Precision(10,2)]
+		//[Range(0,double.MaxValue)]
 		public decimal Price { get; set; }
 
 		public Category Category { get; set; }
-		[Required]
+		//[Required]
 		public int CategoryId { get; set; }
 
 		public string MainImagePath { get; set; }

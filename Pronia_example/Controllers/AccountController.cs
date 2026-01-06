@@ -6,7 +6,7 @@ using Pronia_example.ViewModels.UserViewModels;
 
 namespace Pronia_example.Controllers
 {
-    public class AccountController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager) : Controller
+    public class AccountController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager, RoleManager<IdentityRole> _roleManager) : Controller
     {
         public IActionResult Register()
         {
@@ -49,8 +49,9 @@ namespace Pronia_example.Controllers
                 }
                 return View(vm);
             }
-
-            return Ok("ok");
+            // signin async dediyime gore birbasa registerden home-a gedecek
+            await _signInManager.SignInAsync(newUser, false);
+            return RedirectToAction("Index","Home");
         }
 
         public IActionResult Login()
@@ -79,7 +80,7 @@ namespace Pronia_example.Controllers
                 ModelState.AddModelError("", "Email or password is incorrect");
                 return View(vm);
             }
-            await _signInManager.SignInAsync(user, false);
+            await _signInManager.SignInAsync(user, vm.IsRemember);
             return Ok($"{user.Fullname} welcome");
 
             
@@ -91,5 +92,28 @@ namespace Pronia_example.Controllers
             return RedirectToAction(nameof(Login));
 
         }
+
+        //public async Task<IActionResult> CreateRoles()
+        //{
+        //    await _roleManager.CreateAsync(new IdentityRole()
+        //    {
+        //        Name="User"
+
+        //    });
+        //    await _roleManager.CreateAsync(new IdentityRole()
+        //    {
+        //        Name="Admin"
+        //    });
+        //    await _roleManager.CreateAsync(new IdentityRole()
+        //    {
+        //        Name = "Moderator"
+        //    });
+        //    return Ok("Roles created");
+
+        //}
+
+        // Her sey ela isleyir adminlik verdim oz adimla yaratdigim username-e ammaki home sehifesinde admin sozu cixmiree layoutda da 
+        // yazmisamki user. isinrole admindise asp are admin, asp controller dashboard asp-action index amma yenede home-da admin sozu gorunmur
+        // ammaki admin/dashboard edende gedir adminin dashboard-na
     }
 }

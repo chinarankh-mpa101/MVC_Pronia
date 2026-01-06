@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pronia_example.Contexts;
 using Pronia_example.Models;
 
@@ -11,6 +12,8 @@ namespace Pronia_example.Controllers
         {
             _context = context;
         }
+
+        [Authorize]
         public IActionResult Index()
         {
 

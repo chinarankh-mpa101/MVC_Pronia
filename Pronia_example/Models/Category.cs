@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 public class Category : BaseEntity
 {
-	[Required]
-	[MaxLength(255)]
+	//[Required]
+	//[MaxLength(255)]
 	public string Name { get; set; }
+	public ICollection<Product> Products { get; set; }
 }
