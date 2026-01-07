@@ -1,16 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pronia_example.Abstraction;
 using Pronia_example.Contexts;
 using Pronia_example.ViewModels.ProductViewModels;
 
 namespace Pronia_example.Controllers
 {
-	public class ShopController(AppDbContext _context) : Controller
+	public class ShopController(AppDbContext _context, IEmailService _emailService ) : Controller
 	{
 		public async Task <IActionResult> Index()
 		{
 			var products= await _context.Products.ToListAsync();
 			return View(products);
+		}
+
+		public async Task<IActionResult> Test()
+		{
+			await _emailService.SendEmailAsync("chinarankh-mpa101@code.edu.az", "MPA-101", "<h1 style='color:red'> Email service is done</h1>");
+			return Ok("Ok");
 		}
 
 

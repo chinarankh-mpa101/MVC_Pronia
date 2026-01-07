@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Pronia_example.Abstraction;
 using Pronia_example.Contexts;
+using Pronia_example.Services;
 
 namespace Pronia_example
 {
@@ -10,6 +12,8 @@ namespace Pronia_example
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddDbContext<AppDbContext>(option =>
             {
