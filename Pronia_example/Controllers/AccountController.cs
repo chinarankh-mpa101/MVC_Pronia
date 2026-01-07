@@ -54,13 +54,14 @@ namespace Pronia_example.Controllers
 			// signin async dediyime gore birbasa registerden home-a gedecek
 
 			await SendConfirmationMailAsync(newUser);
-			ModelState.AddModelError("", "Please confirm your email");
+			TempData["SuccessMessage"] = "Registerden ugurla kecdiniz zehmet olmasa emailinizi tesdiqleyin";
+			//ModelState.AddModelError("", "Please confirm your email");
 			return RedirectToAction("Login");
 		}
 
 		public IActionResult Login()
 		{
-
+			
 			return View();
 		}
 
