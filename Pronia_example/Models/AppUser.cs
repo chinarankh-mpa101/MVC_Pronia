@@ -5,5 +5,7 @@ namespace Pronia_example.Models
     public class AppUser:IdentityUser
     {
         public string Fullname { get; set; }
-    }
+		public ICollection<BasketItem> BasketItems { get; set; } = [];
+
+	}
 }

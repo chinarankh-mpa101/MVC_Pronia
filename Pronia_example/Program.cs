@@ -15,7 +15,10 @@ namespace Pronia_example
 
             builder.Services.AddScoped<IEmailService, EmailService>();
 
-            builder.Services.AddDbContext<AppDbContext>(option =>
+
+			builder.Services.AddScoped<IBasketService, BasketService>();
+
+			builder.Services.AddDbContext<AppDbContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });

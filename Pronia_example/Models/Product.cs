@@ -32,6 +32,7 @@ namespace Pronia_example.Models
 
 		public ICollection<Productİmage> Productİmages { get; set; } = [];
         public ICollection<ProductTag> ProductTags { get; set; } = [];
+		public ICollection<BasketItem> BasketItems { get; set; } = [];
 
         //public ICollection<Productİmage> Productİmages { get; set; }
     }
