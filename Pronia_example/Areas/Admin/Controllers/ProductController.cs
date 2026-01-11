@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
+using Pronia_example.Abstraction;
 using Pronia_example.Contexts;
 using Pronia_example.Helpers;
 using Pronia_example.Migrations;
@@ -13,7 +14,7 @@ namespace Pronia_example.Areas.Admin.Controllers
 {
     [Area("Admin")]
 
-    public class ProductController(AppDbContext _context, IWebHostEnvironment _enviroment) : Controller
+    public class ProductController(AppDbContext _context, IWebHostEnvironment _enviroment, ICloudinaryService _cloudinaryService) : Controller
     {
         public async Task<IActionResult> Index()
         {
